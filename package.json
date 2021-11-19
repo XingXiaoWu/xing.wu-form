@@ -13,6 +13,7 @@
   "sideEffects": false,
   "scripts": {
     "serve": "vue-cli-service serve dev/serve.js",
+    "page": "vue-cli-service build dev/serve.js",
     "prebuild": "rimraf ./dist",
     "build": "cross-env NODE_ENV=production rollup --config build/rollup.config.js",
     "build:ssr": "cross-env NODE_ENV=production rollup --config build/rollup.config.js --format cjs",
