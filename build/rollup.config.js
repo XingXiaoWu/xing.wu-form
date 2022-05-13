@@ -7,6 +7,7 @@ import commonjs from '@rollup/plugin-commonjs';
 import resolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
 import babel from '@rollup/plugin-babel';
+import PostCSS from 'rollup-plugin-postcss';
 import { terser } from 'rollup-plugin-terser';
 import minimist from 'minimist';
 
@@ -50,6 +51,15 @@ const baseConfig = {
       resolve({
         extensions: ['.js', '.jsx', '.ts', '.tsx', '.vue'],
       }),
+      // Process only `<style module>` blocks.
+      PostCSS({
+        modules: {
+          generateScopedName: '[local]___[hash:base64:5]',
+        },
+        include: /&module=.*\.css$/,
+      }),
+      // Process all `<style>` blocks except `<style module>`.
+      PostCSS({ include: /(?<!&module=.*)\.css$/ }),
       commonjs(),
     ],
     babel: {
@@ -125,6 +135,7 @@ if (!argv.format || argv.format === 'cjs') {
     plugins: [
       replace(baseConfig.plugins.replace),
       ...baseConfig.plugins.preVue,
+      // vue(baseConfig.plugins.vue),
       vue({
         ...baseConfig.plugins.vue,
         template: {

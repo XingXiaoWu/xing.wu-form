@@ -1,17 +1,21 @@
 
-// Import vue components
-import * as components from '@/lib-components/index';
+// Import vue component
+import component from '@/xing-wu-form.vue';
 
-// install function executed by Vue.use()
-const install = function installXingWuForm(Vue) {
-  Object.entries(components).forEach(([componentName, component]) => {
-    Vue.component(componentName, component);
-  });
-};
+// Default export is installable instance of component.
+// IIFE injects install function into component, allowing component
+// to be registered via Vue.use() as well as Vue.component(),
+export default /*#__PURE__*/(() => {
+  // Get component instance
+  const installable = component;
 
-// Create module definition for Vue.use()
-export default install;
+  // Attach install function executed by Vue.use()
+  installable.install = (app) => {
+    app.component('XingWuForm', installable);
+  };
+  return installable;
+})();
 
-// To allow individual component use, export components
-// each can be registered via Vue.component()
-export * from '@/lib-components/index';
+// It's possible to expose named exports when writing components that can
+// also be used as directives, etc. - eg. import { RollupDemoDirective } from 'rollup-demo';
+// export const RollupDemoDirective = directive;
