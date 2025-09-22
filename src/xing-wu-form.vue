@@ -5,9 +5,7 @@
         <el-col :span="24 / column">
           <el-form-item v-bind="item">
             <!-- 内容 -->
-            <component :is="item.type" v-model="form[item.prop]" 
-            v-bind="item.component"
-            :class="[
+            <component :is="item.type" v-model="form[item.prop]" v-bind="item.component" :class="[
               // 不包含radio和checkbox
               item.type.indexOf('radio') === -1 && item.type.indexOf('checkbox') === -1
                 ? 'xing-wu-form-width100'
@@ -27,7 +25,8 @@
               </template>
               <template v-else-if="item.type === 'el-radio-group'">
                 <el-radio v-for="(option, optionIndex) in item.component.options" :key="optionIndex"
-                  :label="option[item.component.optionsValueKey]" v-bind="option" />
+                  :label="option[item.component.optionsLabelKey]" :value="option[item.component.optionsValueKey]"
+                  v-bind="option" />
               </template>
             </component>
           </el-form-item>
@@ -38,7 +37,7 @@
 </template>
 
 <script>
-import { computed, defineComponent, ref, watch} from "vue";
+import { computed, defineComponent, ref, watch } from "vue";
 
 export default defineComponent({
   name: "XingWuForm", // vue component name
@@ -60,7 +59,7 @@ export default defineComponent({
     },
     instance: {
       type: Object,
-      default: ()=>{}
+      default: () => { }
     }
   },
   emits: ['update:modelValue', 'update:instance'],

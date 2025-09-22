@@ -61,73 +61,8 @@ export default defineComponent({
 
     // 生成表单
     const createForm = () => {
-      // state.formItems = JSON.parse(state.textarea);
-      state.formItems = [
-        {
-          "type": "el-input",
-          "label": "姓名：",
-          "prop": "name",
-          "component": {
-            "placeholder": "请输入234",
-            "disabled": true,
-            "class": [
-              "test1",
-              "test2"
-            ]
-          }
-        },
-        {
-          "type": "el-select",
-          "label": "姓名2：",
-          "prop": "name2",
-          "component": {
-            "placeholder": "请选择456",
-            "optionsLabelKey": "name",
-            "optionsValueKey": "id",
-            onChange: () => {
-              console.log(123);
-            },
-            "options": [
-              {
-                "name": "一年级",
-                "id": "123"
-              },
-              {
-                "name": "二年级",
-                "id": "456"
-              }
-            ]
-          }
-        },
-        {
-          "type": "el-checkbox-group",
-          "label": "姓名3：",
-          "prop": "name3",
-          "component": {
-            "placeholder": "请输入456",
-            "optionsLabelKey": "name",
-            "optionsValueKey": "id",
-            "options": [
-              {
-                "name": "一年级",
-                "id": "123"
-              },
-              {
-                "name": "二年级",
-                "id": "456"
-              }
-            ]
-          }
-        },
-        {
-          "type": "el-checkbox",
-          "label": "姓名4：",
-          "prop": "name4",
-          "component": {
-            "label": "笨比"
-          }
-        }
-      ]
+      state.formItems = JSON.parse(state.textarea);
+      // state.formItems = state.textarea
     };
     const printForm = () => {
       console.log('state.formValue = ', state.formValue);
