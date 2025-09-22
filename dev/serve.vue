@@ -1,11 +1,6 @@
 <template>
   <div id="app" class="main">
     <div class="textarea">
-      <span>表单几列：</span>
-      <el-input-number v-model="column" :min="1" :max="10" label="几列"></el-input-number>
-      <span>表单json内容：</span>
-      <el-input type="textarea" :rows="2" placeholder="请输入内容" :autosize="{ minRows: 40, maxRows: 100 }"
-        v-model="textarea" />
       <el-row :gutter="10">
         <el-col :span="6">
           <el-button type="primary" @click="formatting"> 1.格式化 </el-button>
@@ -14,9 +9,16 @@
           <el-button type="primary" @click="createForm"> 2.生成表单 </el-button>
         </el-col>
       </el-row>
+      <span>表单几列：</span>
+      <el-input-number v-model="column" :min="1" :max="10" label="几列"></el-input-number>
+      <span>表单json内容：</span>
+      <el-input type="textarea" :rows="2" placeholder="请输入内容" :autosize="{ minRows: 40, maxRows: 100 }"
+        v-model="textarea" />
+
     </div>
     <div class="form">
-      <xing-wu-form v-model:instance="formRef" label-width="80px" v-model="formValue" :formItems="formItems" :column="column" />
+      <xing-wu-form v-model:instance="formRef" label-width="80px" v-model="formValue" :formItems="formItems"
+        :column="column" />
       <el-button type="primary" @click="printForm"> 打印当前数据 </el-button>
       <el-button type="primary" @click="clearForm"> reset </el-button>
     </div>
@@ -83,7 +85,7 @@ export default defineComponent({
             "optionsLabelKey": "name",
             "optionsValueKey": "id",
             onChange: () => {
-                console.log(123);
+              console.log(123);
             },
             "options": [
               {
