@@ -20,13 +20,14 @@ npm run serve
 # el-form,el-row,el-col,el-form-item,el-checkbox,el-option,el-radio
 npm install @xing.wu/form
 ```
-先引入`ElementUI`再引入`XingWuForm`
+先引入`ElementPlus`再引入`XingWuForm`
 ```js
-import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
+import ElementPlus from 'element-plus';
+import 'element-plus/dist/index.css'
 import XingWuForm from '@xing.wu/form';
-Vue.use(XingWuForm);
-Vue.use(ElementUI);
+app.use(ElementPlus);
+app.use(XingWuForm);
+
 ```
 示例
 ```vue
@@ -34,7 +35,7 @@ Vue.use(ElementUI);
 <template>
   <div id="app">
     <xing-wu-form
-      ref="form"
+      v-model:instance="form"
       label-width="80px"
       v-model="formValue"
       :formItems="formItems"
@@ -47,11 +48,11 @@ Vue.use(ElementUI);
 </template>
 
 <script>
-import Vue from "vue";
 // Uncomment import and local "components" registration if library is not registered globally.
 // import { XingWuFormSample } from '@/entry.esm';
+import { defineComponent, reactive, toRefs, ref } from 'vue';
 
-export default Vue.extend({
+export default defineComponent({
   name: "ServeDev",
   // components: {
   //  XingWuFormSample,
@@ -89,11 +90,12 @@ export default Vue.extend({
             placeholder: "请选择456",
             optionsLabelKey: "name",
             optionsValueKey: "id",
-            listeners: {
-              change: () => {
+            // vue3升级，移除listener这一层
+            // listeners: {
+              onChange: () => {
                 console.log(123);
               },
-            },
+            // },
             options: [
               {
                 name: "一年级",
@@ -187,7 +189,7 @@ export default Vue.extend({
 |参数|说明|类型|可选值|默认值|备注|
 | --- | --- | --- | --- | --- | --- |
 | class | 需要给当前组件添加的样式 | `Array<String>` | - | `xing-wu-form-width100` | 非`checkbox`和`radio`组件默认添加样式`.xing-wu-form-width100{width:100%}`. `scoped`添加`::v-deep` |
-| listeners | `type`组件的可触发事件 | `Object` | --- | --- | ``` {event:(args)=>{}} ``` |
+| ~~listeners~~ 随着vue3升级，已被取消，直接在本级添加`on`前缀的事件名即可 | `type`组件的可触发事件 | `Object` | --- | --- | ``` {event:(args)=>{}} ``` |
 |options|可选项，或组件本身需要的属性|`Array<Object>`|-|-|当type为<br>`el-select`<br>`el-checkbox-group`<br>`el-radio-group`<br>时，可选项会读取这个属性|
 |optionsLabelKey|存在可选项时，可选项label的key|string|-|-|同上|
 |optionsValueKey|存在可选项时，可选项value的key|string|-|-|同上|
