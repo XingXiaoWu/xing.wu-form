@@ -189,4 +189,6 @@ export default defineComponent({
 |options|可选项，或组件本身需要的属性|`Array<Object>`|-|-|当type为<br>`el-select`<br>`el-checkbox-group`<br>`el-radio-group`<br>时，可选项会读取这个属性|
 |optionsLabelKey|存在可选项时，可选项label的key|string|-|-|同上|
 |optionsValueKey|存在可选项时，可选项value的key|string|-|-|同上|
+|prepend|el-input可用，钱置插槽|string|-|-|同上|
+|append|el-input可用，后置插槽|string|-|-|同上|
 |其他可添加属性|-|-|-|-|见`type`对应标签的文档|

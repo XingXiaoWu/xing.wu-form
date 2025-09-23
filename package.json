@@ -1,6 +1,6 @@
 {
   "name": "@xing.wu/form",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "表单二次封装",
   "main": "dist/xing-wu-form.esm.js",
   "browser": "dist/xing-wu-form.esm.js",

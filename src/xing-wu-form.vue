@@ -28,6 +28,14 @@
                   :label="option[item.component.optionsLabelKey]" :value="option[item.component.optionsValueKey]"
                   v-bind="option" />
               </template>
+
+              <!-- 前后 -->
+              <template #prepend v-if="item.component.prepend">
+                {{ item.component.prepend }}
+              </template>
+              <template #append v-if="item.component.append">
+                {{ item.component.append }}
+              </template>
             </component>
           </el-form-item>
         </el-col>
