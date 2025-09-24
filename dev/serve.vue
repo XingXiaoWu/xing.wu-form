@@ -4,13 +4,6 @@
       <el-row :gutter="10">
         <el-col :span="6">
           <el-button type="primary" @click="formatting"> 1.格式化 </el-button>
-          <!-- <el-upload class="avatar-uploader" action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
-            :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
-            <img v-if="imageUrl" :src="imageUrl" class="avatar" />
-            <el-icon v-else class="avatar-uploader-icon">
-              <Plus />
-            </el-icon>
-          </el-upload> -->
         </el-col>
         <el-col :span="6">
           <el-button type="primary" @click="createForm"> 2.生成表单 </el-button>
@@ -33,9 +26,8 @@
 </template>
 
 <script setup name="ServeDev">
-import { defineComponent, reactive, toRefs, ref } from 'vue';
+import { ref } from 'vue';
 import { ElMessage } from 'element-plus'
-import { Plus } from '@element-plus/icons-vue'
 
 const imageUrl = ref('')
 const handleAvatarSuccess = (
@@ -58,7 +50,7 @@ const beforeAvatarUpload = (rawFile) => {
 
 const formRef = ref();
 
-const textarea = ref(`[{"type":"el-input","label":"姓名：","prop":"name","component":{"placeholder":"请输入234","disabled":true,"class":["test1","test2"]}},{"type":"el-select","label":"姓名2：","prop":"name2","component":{"placeholder":"请选择456","optionsLabelKey":"name","optionsValueKey":"id","listeners":{},"options":[{"name":"一年级","id":"123"},{"name":"二年级","id":"456"}]}},{"type":"el-checkbox-group","label":"姓名3：","prop":"name3","component":{"placeholder":"请输入456","optionsLabelKey":"name","optionsValueKey":"id","options":[{"name":"一年级","id":"123"},{"name":"二年级","id":"456"}]}},{"type":"el-checkbox","label":"姓名4：","prop":"name4","component":{"label":"笨比"}}]`)
+const textarea = ref(`[{"type":"el-input","attrs":{"label":"姓名：","prop":"name"},"component":{"placeholder":"请输入234","disabled":true,"class":["test1","test2"]}},{"type":"el-select","attrs":{"label":"姓名2：","prop":"name2"},"component":{"placeholder":"请选择456","optionsLabelKey":"name","optionsValueKey":"id","listeners":{},"options":[{"name":"一年级","id":"123"},{"name":"二年级","id":"456"}]}},{"type":"el-checkbox-group","attrs":{"label":"姓名3：","prop":"name3"},"component":{"placeholder":"请输入456","optionsLabelKey":"name","optionsValueKey":"id","options":[{"name":"一年级","id":"123"},{"name":"二年级","id":"456"}]}},{"type":"el-checkbox","attrs":{"label":"姓名4：","prop":"name4"},"component":{"label":"笨比"}}]`)
 const column = ref(1)
 const formValue = ref({})
 const formItems = ref([])

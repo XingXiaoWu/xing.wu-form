@@ -13,6 +13,14 @@
                   :value="option[item.component.optionsValueKey || 'value'] || ''" v-bind="option">
                 </component>
               </template>
+
+              <template v-if="item.type == 'el-upload'">
+                <img v-if="form[item.attrs.prop]" :src="form[item.attrs.prop]" class="xing-avatar" />
+                <el-icon v-else class="xing-avatar-uploader-icon">
+                  <component :is="item.component.icon" />
+                </el-icon>
+              </template>
+
               <template #prepend v-if="item.component.prepend">
                 {{ item.component.prepend }}
               </template>
@@ -35,6 +43,8 @@
 // item内组件可能存在次级组件
 
 import { computed, mergeProps, defineComponent, onMounted, ref, watch } from "vue";
+import { Plus } from '@element-plus/icons-vue'
+
 const props = defineProps({
   formItems: {
     type: Array,
@@ -84,7 +94,21 @@ const form = computed({
 
 <style>
 /* 这个前缀理论上不会重名了 */
-.xing-wu-form-width100 {
+/* .xing-wu-form-width100 {
   width: 100%;
+} */
+
+.xing-avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
+}
+
+.xing-avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  text-align: center;
 }
 </style>

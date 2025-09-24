@@ -21,143 +21,158 @@ npm install @xing.wu/form
 import ElementPlus from 'element-plus';
 import 'element-plus/dist/index.css'
 import XingWuForm from '@xing.wu/form';
-app.use(ElementPlus);
-app.use(XingWuForm);
+// 如果需要使用图标
+import * as Icons from "@element-plus/icons-vue";
 
+const app = createApp(Dev);
+app.use(ElementPlus);
+// 如果需要使用图标，则需要注册图标组件
+Object.keys(Icons).forEach((key) => {
+  app.component(key, Icons[key]);
+});
+app.use(XingWuForm);
+app.mount('#app');
 ```
 示例
 ```vue
 
 <template>
-  <div id="app">
-    <xing-wu-form
-      v-model:instance="form"
-      label-width="80px"
-      v-model="formValue"
-      :formItems="formItems"
-      :column="3"
-    />
-    <el-button type="primary" @click="printForm">打印formValue</el-button>
-    <el-button type="primary" @click="clearForm">resetFields</el-button>
-    <el-button type="primary" @click="validate">validate</el-button>
+  <div id="app" class="main">
+    <div class="textarea">
+      <el-row :gutter="10">
+        <el-col :span="6">
+          <el-button type="primary" @click="formatting"> 1.格式化 </el-button>
+        </el-col>
+        <el-col :span="6">
+          <el-button type="primary" @click="createForm"> 2.生成表单 </el-button>
+        </el-col>
+      </el-row>
+      <span>表单几列：</span>
+      <el-input-number v-model="column" :min="1" :max="10" label="几列"></el-input-number>
+      <span>表单json内容：</span>
+      <el-input type="textarea" :rows="2" placeholder="请输入内容" :autosize="{ minRows: 40, maxRows: 100 }"
+        v-model="textarea" />
+
+    </div>
+    <div class="form">
+      <xing-wu-form v-model:instance="formRef" label-width="80px" v-model="formValue" :formItems="formItems"
+        :column="column" />
+      <el-button type="primary" @click="printForm"> 打印当前数据 </el-button>
+      <el-button type="primary" @click="clearForm"> reset </el-button>
+    </div>
   </div>
 </template>
 
 <script>
-// Uncomment import and local "components" registration if library is not registered globally.
-// import { XingWuFormSample } from '@/entry.esm';
-import { defineComponent, reactive, toRefs, ref } from 'vue';
+import { ref } from 'vue';
+import { ElMessage } from 'element-plus'
 
-export default defineComponent({
-  name: "ServeDev",
-  // components: {
-  //  XingWuFormSample,
-  // }
-  data() {
-    return {
-      formValue: {
-        name: "",
-        name2: "456",
-        name3: [],
-        name4: true,
-      },
-      formValue2: {
-        name: "",
-        name2: "456",
-        name3: [],
-        name4: true,
-      },
-      formItems: [
-        {
-          type: "el-input",
-          label: "姓名：",
-          prop: "name",
-          component: {
-            placeholder: "请输入234",
-            disabled: true,
-            class: ["test1","test2"],
-          },
-        },
-        {
-          type: "el-select",
-          label: "姓名2：",
-          prop: "name2",
-          component: {
-            placeholder: "请选择456",
-            optionsLabelKey: "name",
-            optionsValueKey: "id",
-            // vue3升级，移除listener这一层
-            // listeners: {
-              onChange: () => {
-                console.log(123);
-              },
-            // },
-            options: [
-              {
-                name: "一年级",
-                id: "123",
-              },
-              {
-                name: "二年级",
-                id: "456",
-              },
-            ],
-          },
-        },
-        {
-          type: "el-checkbox-group",
-          label: "姓名3：",
-          prop: "name3",
-          component: {
-            placeholder: "请输入456",
-            optionsLabelKey: "name",
-            optionsValueKey: "id",
-            options: [
-              {
-                name: "一年级",
-                id: "123",
-              },
-              {
-                name: "二年级",
-                id: "456",
-              },
-            ],
-          },
-        },
-        {
-          type: "el-checkbox",
-          label: "姓名4：",
-          prop: "name4",
-          component: {
-            label: "笨比",
-          },
-        },
-      ],
-    };
-  },
-  methods: {
-    printForm() {
-      console.log(this.formValue);
-    },
-    clearForm() {
-      this.$refs.form.resetFields();
-    },
-    validate() {
-      this.$refs.form.validate((valid) => {
-        console.log("校验完毕");
-      });
-    },
-  },
-});
+const imageUrl = ref('')
+const handleAvatarSuccess = (
+  response,
+  uploadFile
+) => {
+  imageUrl.value = URL.createObjectURL(uploadFile.raw)
+}
+
+const beforeAvatarUpload = (rawFile) => {
+  if (rawFile.type !== 'image/jpeg') {
+    ElMessage.error('Avatar picture must be JPG format!')
+    return false
+  } else if (rawFile.size / 1024 / 1024 > 2) {
+    ElMessage.error('Avatar picture size can not exceed 2MB!')
+    return false
+  }
+  return true
+}
+
+const formRef = ref();
+
+const textarea = ref(`[{"type":"el-input","attrs":{"label":"姓名：","prop":"name"},"component":{"placeholder":"请输入234","disabled":true,"class":["test1","test2"]}},{"type":"el-select","attrs":{"label":"姓名2：","prop":"name2"},"component":{"placeholder":"请选择456","optionsLabelKey":"name","optionsValueKey":"id","listeners":{},"options":[{"name":"一年级","id":"123"},{"name":"二年级","id":"456"}]}},{"type":"el-checkbox-group","attrs":{"label":"姓名3：","prop":"name3"},"component":{"placeholder":"请输入456","optionsLabelKey":"name","optionsValueKey":"id","options":[{"name":"一年级","id":"123"},{"name":"二年级","id":"456"}]}},{"type":"el-checkbox","attrs":{"label":"姓名4：","prop":"name4"},"component":{"label":"笨比"}}]`)
+const column = ref(1)
+const formValue = ref({})
+const formItems = ref([])
+
+// 格式化
+const formatting = () => {
+  let tmp = eval("(" + textarea.value + ")");
+  let value = {};
+  tmp.forEach((item) => {
+    if (item.type === "el-checkbox-group") {
+      value[item.prop] = [];
+    } else {
+      value[item.prop] = null;
+    }
+  });
+  console.log(tmp);
+  textarea.value = JSON.stringify(tmp, null, 4);
+  formValue.value = value;
+};
+
+// 生成表单
+const createForm = () => {
+  // state.formItems = JSON.parse(state.textarea);
+  formItems.value = JSON.parse(textarea.value)
+};
+const printForm = () => {
+  console.log('formValue = ', formValue.value);
+};
+const clearForm = () => {
+  console.log(formRef);
+  formRef.value.resetFields();
+};
+const validate = () => {
+  formRef.value.validate((valid) => {
+    console.log("校验完毕");
+  });
+};
 </script>
 
 <style scoped>
-::v-deep .test1 {
+.main {
+  display: flex;
+  flex-direction: row;
+}
+
+.main .textarea {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.main .form {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+}
+
+.avatar-uploader .el-upload {
+  border: 1px dashed var(--el-border-color);
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: var(--el-transition-duration-fast);
+}
+
+.avatar-uploader .el-upload:hover {
+  border-color: var(--el-color-primary);
+}
+
+.el-icon.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  text-align: center;
+}
+
+/* ::v-deep .test1 {
   width: 20%;
 }
 ::v-deep .test2 {
   background-color: red;
-}
+} */
 </style>
 
 
@@ -176,7 +191,7 @@ export default defineComponent({
 ## form-items-object
 |参数|说明|类型|可选值|默认值|备注|
 | --- | --- | --- | --- | --- | --- |
-|type|需要渲染在`form-item`中的组件|string|`el-input`<br>`el-radio-group`<br>`el-checkbox-group`<br>`el-input-number`<br>`el-select`<br>`el-cascader`<br>`el-switch`<br>`el-slider`<br>`el-time-select`<br>`el-date-picker`<br>`el-rate`<br>等几乎所有`element-ui`常用表单标签|-|如果发现有不支持的联系`hukai`|
+|type|需要渲染在`form-item`中的组件|string|`el-input`<br>`el-radio-group`<br>`el-checkbox-group`<br>`el-input-number`<br>`el-select`<br>`el-cascader`<br>`el-switch`<br>`el-slider`<br>`el-time-select`<br>`el-date-picker`<br>`el-rate`<br>等几乎所有`element-ui`常用表单标签|-|如果发现有不支持的联系`XingXiaoWu`|
 |rules|需要校验的规则|`Array<Object>`|-|-|符合`async-validator`即可|
 |component|type对应组件的属性|`Object`|-|-|componen内容见下`component`|
 |其他可添加属性|-|-|-|-|见`element-ui`的[form-item-attributes](https://element.eleme.cn/#/zh-CN/component/form/#form-item-attributes)(右键复制链接到浏览器打开，不要直接点击)|
