@@ -17,10 +17,12 @@
 
     </div>
     <div class="form">
-      <xing-wu-form v-model:instance="formRef" label-width="80px" v-model="formValue" :formItems="formItems"
-        :column="column" />
       <el-button type="primary" @click="printForm"> 打印当前数据 </el-button>
       <el-button type="primary" @click="clearForm"> reset </el-button>
+      
+      <xing-wu-form v-model:instance="formRef" label-width="80px" v-model="formValue" :formItems="formItems"
+        :column="column" />
+
     </div>
   </div>
 </template>
@@ -37,7 +39,7 @@ export default defineComponent({
     const formRef = ref();
 
     const state = reactive({
-      textarea: `[{"type":"el-input","label":"姓名：","prop":"name","component":{"placeholder":"请输入234","disabled":true,"class":["test1","test2"]}},{"type":"el-select","label":"姓名2：","prop":"name2","component":{"placeholder":"请选择456","optionsLabelKey":"name","optionsValueKey":"id","listeners":{},"options":[{"name":"一年级","id":"123"},{"name":"二年级","id":"456"}]}},{"type":"el-checkbox-group","label":"姓名3：","prop":"name3","component":{"placeholder":"请输入456","optionsLabelKey":"name","optionsValueKey":"id","options":[{"name":"一年级","id":"123"},{"name":"二年级","id":"456"}]}},{"type":"el-checkbox","label":"姓名4：","prop":"name4","component":{"label":"笨比"}}]`,
+      textarea: `[{"type":"el-input", "attrs": {"label":"姓名：","prop":"name"},"component":{"placeholder":"请输入234","disabled":true,"class":["test1","test2"]}},{"type":"el-select", "attrs": {"label":"姓名2：","prop":"name2"},"component":{"placeholder":"请选择456","optionsLabelKey":"name","optionsValueKey":"id","listeners":{},"options":[{"name":"一年级","id":"123"},{"name":"二年级","id":"456"}]}},{"type":"el-checkbox-group", "attrs": {"label":"姓名3：","prop":"name3"},"component":{"placeholder":"请输入456","optionsLabelKey":"name","optionsValueKey":"id","options":[{"name":"一年级","id":"123"},{"name":"二年级","id":"456"}]}},{"type":"el-checkbox", "attrs": {"label":"姓名4：","prop":"name4"},"component":{"label":"笨比"}}]`,
       column: 1,
       formValue: {},
       formItems: [],
@@ -49,9 +51,9 @@ export default defineComponent({
       let value = {};
       tmp.forEach((item) => {
         if (item.type === "el-checkbox-group") {
-          value[item.prop] = [];
+          value[item.attrs.prop] = [];
         } else {
-          value[item.prop] = null;
+          value[item.attrs.prop] = null;
         }
       });
       console.log(tmp);

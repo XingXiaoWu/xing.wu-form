@@ -1,35 +1,18 @@
 <template>
-  <el-form :ref="setFormRef" :model="form" v-bind="$attrs">
+  <el-form :ref="setFormRef" :model="form" v-bind="mergeProps($attrs, props)">
     <el-row>
       <template v-for="(item, index) in formItems" :key="index">
         <el-col :span="24 / column">
-          <el-form-item v-bind="item">
+          <el-form-item v-bind="mergeProps(item.attrs)">
             <!-- 内容 -->
-            <component :is="item.type" v-model="form[item.prop]" v-bind="item.component" :class="[
-              // 不包含radio和checkbox
-              item.type.indexOf('radio') === -1 && item.type.indexOf('checkbox') === -1
-                ? 'xing-wu-form-width100'
-                : '',
-              ...getClass(item.component)
-            ]">
-              <template v-if="item.type === 'el-checkbox-group'">
-                <el-checkbox v-for="(option, optionIndex) in item.component.options" :key="optionIndex"
-                  :label="option[item.component.optionsValueKey]" v-bind="option">
-                  {{ option[item.component.optionsLabelKey] }}
-                </el-checkbox>
+            <component :is="item.type" v-model="form[item.attrs.prop]" v-bind="item.component">
+              <template v-if="item.component.options">
+                <component :is="item.type == 'el-select' ? 'el-option' : (item.type.replace('-group', ''))"
+                  v-for="(option, optionIndex) in item.component.options" :key="optionIndex"
+                  :label="option[item.component.optionsLabelKey || 'label']"
+                  :value="option[item.component.optionsValueKey || 'value'] || ''" v-bind="option">
+                </component>
               </template>
-              <template v-else-if="item.type === 'el-select'">
-                <el-option v-for="(option, optionIndex) in item.component.options" :key="optionIndex"
-                  :label="option[item.component.optionsLabelKey]" :value="option[item.component.optionsValueKey]"
-                  v-bind="option" />
-              </template>
-              <template v-else-if="item.type === 'el-radio-group'">
-                <el-radio v-for="(option, optionIndex) in item.component.options" :key="optionIndex"
-                  :label="option[item.component.optionsLabelKey]" :value="option[item.component.optionsValueKey]"
-                  v-bind="option" />
-              </template>
-
-              <!-- 前后 -->
               <template #prepend v-if="item.component.prepend">
                 {{ item.component.prepend }}
               </template>
@@ -44,67 +27,59 @@
   </el-form>
 </template>
 
-<script>
-import { computed, defineComponent, ref, watch } from "vue";
+<script setup name="XingWuForm">
+// 三段
+// el-form
+// el-form-item
+// item内组件
+// item内组件可能存在次级组件
 
-export default defineComponent({
-  name: "XingWuForm", // vue component name
-  props: {
-    // 需要写的表单内容
-    formItems: {
-      type: Array,
-      default: () => [],
-    },
-    // 需要绑定的数据
-    modelValue: {
-      type: Object,
-      default: () => { }
-    },
-    // 一行几个
-    column: {
-      type: Number,
-      default: 1,
-    },
-    instance: {
-      type: Object,
-      default: () => { }
-    }
+import { computed, mergeProps, defineComponent, onMounted, ref, watch } from "vue";
+const props = defineProps({
+  formItems: {
+    type: Array,
+    default: () => [],
   },
-  emits: ['update:modelValue', 'update:instance'],
-  setup(props, context) {
-
-    const setFormRef = (el) => {
-      context.emit('update:instance', el);
-    };
-
-    const form = computed({
-      get: () => {
-        console.log('props.modelValue =', props.modelValue);
-        return props.modelValue;
-      },
-      set: (val) => {
-        context.emit('update:modelValue', val);
-      }
-    })
-
-    const getClass = computed(() => {
-      return (component) => {
-        if (component.class) {
-          return component.class
-        } else {
-          return []
-        }
-      }
-    })
-
-
-    return {
-      form,
-      setFormRef,
-      getClass
-    }
+  modelValue: {
+    type: Object,
+    default: () => { }
   },
-});
+  column: {
+    type: Number,
+    default: 1,
+  },
+  instance: {
+    type: Object,
+    default: () => { }
+  }
+})
+
+const emit = defineEmits(['update:modelValue', 'update:instance'])
+
+const setFormRef = (el) => {
+  emit('update:instance', el);
+};
+
+const form = computed({
+  get: () => {
+    console.log('props.modelValue =', props.modelValue);
+    return props.modelValue;
+  },
+  set: (val) => {
+    emit('update:modelValue', val);
+  }
+})
+
+const getClass = computed(() => {
+  return (component) => {
+    if (component.class) {
+      return component.class
+    } else {
+      return []
+    }
+  }
+})
+
 </script>
 
 <style>
