@@ -2,7 +2,7 @@
   <el-form :ref="setFormRef" :model="form" v-bind="mergeProps($attrs, props)">
     <el-row>
       <template v-for="(item, index) in formItems" :key="index">
-        <el-col :span="24 / column">
+        <el-col :span="24 / props.column">
           <el-form-item v-bind="mergeProps(item.attrs)">
             <!-- 内容 -->
             <component :is="item.type" v-model="form[item.attrs.prop]" v-bind="item.component">
@@ -70,15 +70,15 @@ const form = computed({
   }
 })
 
-const getClass = computed(() => {
-  return (component) => {
-    if (component.class) {
-      return component.class
-    } else {
-      return []
-    }
-  }
-})
+// const getClass = computed(() => {
+//   return (component) => {
+//     if (component.class) {
+//       return component.class
+//     } else {
+//       return []
+//     }
+//   }
+// })
 
 </script>
 
