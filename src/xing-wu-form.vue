@@ -3,9 +3,14 @@
     <el-row>
       <template v-for="(item, index) in formItems" :key="index">
         <el-col :span="24 / props.column">
-          <el-form-item v-bind="mergeProps(item.attrs)">
-            <!-- 内容 -->
-            <component :is="item.type" v-model="form[item.attrs.prop]" v-bind="item.component">
+          <!-- 判断是否为空 -->
+          <el-form-item v-if="item.type !== 'empty'" v-bind="mergeProps(item.attrs)">
+            <!-- 内容 --> <!-- 单独渲染的 -->
+            <template v-if="item.type === 'solt'">
+              <slot :name="item.attrs.label" />
+            </template>
+
+            <component v-else :is="item.type" v-model="form[item.attrs.prop]" v-bind="item.component">
               <template v-if="item.component.options">
                 <component :is="item.type == 'el-select' ? 'el-option' : (item.type.replace('-group', ''))"
                   v-for="(option, optionIndex) in item.component.options" :key="optionIndex"
@@ -15,8 +20,8 @@
               </template>
 
               <template v-if="item.type == 'el-upload'">
-                <img v-if="form[item.attrs.prop]" :src="form[item.attrs.prop]" class="xing-avatar" />
-                <el-icon v-else class="xing-avatar-uploader-icon">
+                <img v-if="form[item.attrs.prop]" :src="form[item.attrs.prop]" class="x-avatar" />
+                <el-icon v-else class="x-avatar-uploader-icon">
                   <component :is="item.component.icon" />
                 </el-icon>
               </template>
@@ -28,6 +33,9 @@
                 {{ item.component.append }}
               </template>
             </component>
+            <p class="x-text-center x-preserve-newlines">
+              {{ item.component.note }}
+            </p>
           </el-form-item>
         </el-col>
       </template>
@@ -41,18 +49,16 @@
 // el-form-item
 // item内组件
 // item内组件可能存在次级组件
-
-import { computed, mergeProps, defineComponent, onMounted, ref, watch } from "vue";
-import { Plus } from '@element-plus/icons-vue'
+import { computed, mergeProps } from "vue";
 
 const props = defineProps({
   formItems: {
     type: Array,
-    default: () => [],
+    default: []
   },
   modelValue: {
     type: Object,
-    default: () => { }
+    default: {}
   },
   column: {
     type: Number,
@@ -60,7 +66,7 @@ const props = defineProps({
   },
   instance: {
     type: Object,
-    default: () => { }
+    default: {}
   }
 })
 
@@ -72,7 +78,6 @@ const setFormRef = (el) => {
 
 const form = computed({
   get: () => {
-    console.log('props.modelValue =', props.modelValue);
     return props.modelValue;
   },
   set: (val) => {
@@ -80,15 +85,6 @@ const form = computed({
   }
 })
 
-// const getClass = computed(() => {
-//   return (component) => {
-//     if (component.class) {
-//       return component.class
-//     } else {
-//       return []
-//     }
-//   }
-// })
 
 </script>
 
@@ -98,17 +94,28 @@ const form = computed({
   width: 100%;
 } */
 
-.xing-avatar {
+.x-avatar {
   width: 178px;
   height: 178px;
   display: block;
 }
 
-.xing-avatar-uploader-icon {
+.x-avatar-uploader-icon {
   font-size: 28px;
   color: #8c939d;
   width: 178px;
   height: 178px;
   text-align: center;
+}
+
+.x-text-center {
+  /* text-align: center; */
+  font-size: 12px;
+  color: #8c939d;
+  line-height: 20px;
+}
+
+.x-preserve-newlines {
+  white-space: pre-line;
 }
 </style>

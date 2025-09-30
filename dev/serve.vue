@@ -1,6 +1,23 @@
 <template>
   <div id="app" class="main">
     <div class="textarea">
+      <p>我这放几个例子，可以复制到上面看看效果</p>
+      <p>例子一：包含输入框，下拉框，多选框，单选框，空白占位符</p>
+      <p>
+        [{"type": "el-input","attrs": {"label": "前台域名/地址","prop": "frontDomain"},"component": {"placeholder":
+        "请输入前台域名/地址","note": "开头必须加通信协议，末尾不要留斜杠。如：https://www.baidu.com"}},{"type": "el-select","attrs": {"label":
+        "前台默认语言","prop": "frontLanguage"},"component": {"placeholder": "请输入后台网站名称","optionsLabelKey":
+        "name","optionsValueKey": "id","options": [{"name": "中文","id": "chinese"},{"name": "英语","id":
+        "english"}]}},{"type": "el-radio-group","attrs": {"label": "注册短信","prop": "webRegisterSms"},"component":
+        {"optionsLabelKey": "name","optionsValueKey": "id","options": [{"name": "开","id": "open"},{"name": "关","id":
+        "close"}]}},{"type": "el-radio-group","attrs": {"label": "注册邀请码","prop": "webRegisterCode"},"component":
+        {"optionsLabelKey": "name","optionsValueKey": "id","options": [{"name": "必填","id": "required"},{"name":
+        "选填","id": "optional"}]}},{"type": "empty",},{"type": "el-input","attrs": {"label": "需要谷歌验证的管理员","prop":
+        "googleAuthAdmins"},"component": {"placeholder": "","type": "textarea","note": '登录账号，多个用", "号隔开'}},{"type":
+        "el-checkbox-group","attrs": {"label": "姓名3：","prop": "name3"},"component": {"placeholder":
+        "请输入456","optionsLabelKey": "name","optionsValueKey": "id","options": [{"name": "一年级","id": "123"},{"name":
+        "二年级","id": "456"}]}},]
+      </p>
       <el-row :gutter="10">
         <el-col :span="6">
           <el-button type="primary" @click="formatting"> 1.格式化 </el-button>
@@ -14,6 +31,8 @@
       <span>表单json内容：</span>
       <el-input type="textarea" :rows="2" placeholder="请输入内容" :autosize="{ minRows: 40, maxRows: 100 }"
         v-model="textarea" />
+
+
 
     </div>
     <div class="form">
@@ -68,79 +87,11 @@ const formatting = () => {
   });
   console.log(tmp);
   textarea.value = JSON.stringify(tmp, null, 4);
-  formValue.value = value;
 };
 
 // 生成表单
 const createForm = () => {
-  // state.formItems = JSON.parse(state.textarea);
   formItems.value = JSON.parse(textarea.value)
-  // formItems.value = [
-  //   {
-  //     "type": "el-input",
-  //     "label": "姓名：",
-  //     "prop": "name",
-  //     "component": {
-  //       "placeholder": "请输入234",
-  //       "disabled": true,
-  //       "class": [
-  //         "test1",
-  //         "test2"
-  //       ]
-  //     }
-  //   },
-  //   {
-  //     "type": "el-select",
-  //     "label": "姓名2：",
-  //     "prop": "name2",
-  //     "component": {
-  //       "placeholder": "请选择456",
-  //       "optionsLabelKey": "name",
-  //       "optionsValueKey": "id",
-  //       onChange: () => {
-  //         console.log(123);
-  //       },
-  //       "options": [
-  //         {
-  //           "name": "一年级",
-  //           "id": "123"
-  //         },
-  //         {
-  //           "name": "二年级",
-  //           "id": "456"
-  //         }
-  //       ]
-  //     }
-  //   },
-  //   {
-  //     "type": "el-checkbox-group",
-  //     "label": "姓名3：",
-  //     "prop": "name3",
-  //     "component": {
-  //       "placeholder": "请输入456",
-  //       "optionsLabelKey": "name",
-  //       "optionsValueKey": "id",
-  //       "options": [
-  //         {
-  //           "name": "一年级",
-  //           "id": "123"
-  //         },
-  //         {
-  //           "name": "二年级",
-  //           "id": "456"
-  //         }
-  //       ]
-  //     }
-  //   },
-  //   {
-  //     "type": "el-checkbox",
-  //     "label": "姓名4：",
-  //     "prop": "name4",
-  //     "component": {
-  //       "label": "笨比"
-  //     }
-  //   }
-  // ]
 };
 const printForm = () => {
   console.log('formValue = ', formValue.value);
